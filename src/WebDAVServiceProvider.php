@@ -15,6 +15,11 @@ class WebDAVServiceProvider extends ServiceProvider
         Storage::extend('webdav', function ($app, $config) {
             $client = new WebDAVClient($config);
 
+            if(array_key_exists("addCurlSetting", $config) && is_array($config["addCurlSetting"])){
+                foreach ($config['addCurlSetting'] as $curlSettingName => $curlSettingValue)
+                    $client->addCurlSetting($curlSettingName, $curlSettingValue);
+            }
+            
             $adapter = new WebDAVAdapter($client);
 
             return new Filesystem($adapter);
